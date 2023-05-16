@@ -30,8 +30,8 @@ def quartiere():
     quartiereTrovato = quartieri3857[quartieri3857['NIL'].str.contains(str(inQuartiere))]
     if len(quartiereTrovato) > 0:
         fig, ax = plt.subplots()
-        ax = soste3857[soste3857.geometry.within(cascaded_union(quartiereTrovato.geometry))].plot()
-        quartiereTrovato.plot(ax=ax)
+        soste3857[soste3857.geometry.intersects(cascaded_union(quartiereTrovato.geometry))].plot(ax = ax, color='r')
+        quartiereTrovato.plot(ax=ax, facecolor='None')
         ctx.add_basemap(ax=ax)
         output = io.BytesIO()
         FigureCanvas(fig).print_png(output)
