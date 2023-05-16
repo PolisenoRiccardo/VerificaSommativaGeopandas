@@ -8,9 +8,9 @@
 </head>
 <body>
     <h1>Scegli il quartiere:</h1>
-    <form action="">
+    <form action="/quartiere">
     {% for quartiere in quartieriNomi %}
-    <input type="radio" name='quartieri' value={{quartiere}}>
+    <input type="radio" name="quartieri" value={{quartiere}}>
     <label for='quartieri'>{{quartiere}}</label><br>
     {%endfor%}
     <br><input type="submit" value="Conferma">

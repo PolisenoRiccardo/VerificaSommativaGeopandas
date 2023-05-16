@@ -18,16 +18,26 @@ soste3857 = soste.to_crs(3857)
 
 quartieri = gpd.read_file('ds964_nil_wm.zip')
 quartieri3857 = quartieri.to_crs(3857)
+quartieriSenzaParcheggio = quartieri3857[~quartieri3857.intersects(cascaded_union(soste3857.geometry))]
 
 @app.route('/', methods=['GET'])
-def home():
-    quartieriSenzaParcheggio = quartieri3857[~quartieri3857.intersects(cascaded_union(soste3857.geometry))]
-    listaQuartieri = quartieriSenzaParcheggio['NIL'].tolist()
-    return render_template('home.html', quartieriNomi = listaQuartieri)
+def home():   
+    return render_template('home.html', quartieriNomi = quartieriSenzaParcheggio['NIL'].tolist())
 
-@app.route('/input', methods=['GET'])
-def input():
-    return render_template('input.html')
+@app.route('/quartiere', methods=['GET'])
+def quartiere():
+    inQuartiere = request.args.get('quartieri')
+    quartiereTrovato = quartieri3857[quartieri3857['NIL'].str.contains(str(inQuartiere))]
+    if len(quartiereTrovato) > 0:
+        fig, ax = plt.subplots()
+        ax = soste3857[soste3857.geometry.within(cascaded_union(quartiereTrovato.geometry))].plot()
+        quartiereTrovato.plot(ax=ax)
+        ctx.add_basemap(ax=ax)
+        output = io.BytesIO()
+        FigureCanvas(fig).print_png(output)
+        return Response(output.getvalue(), mimetype='image/png')
+    else: 
+        return 'errore'
 
 @app.route('/grafico', methods=['GET'])
 def grafico():
