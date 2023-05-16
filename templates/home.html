@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Scegli il quartiere:</h1>
+    <form action="">
+    {% for quartiere in quartieriNomi %}
+    <input type="radio" name='quartieri' value={{quartiere}}>
+    <label for='quartieri'>{{quartiere}}</label><br>
+    {%endfor%}
+    <br><input type="submit" value="Conferma">
+    </form>
+</body>
+</html>
